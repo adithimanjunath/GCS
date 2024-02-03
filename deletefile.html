@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete File</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .error-message {
+            color: red;
+            font-style: italic;
+        }
+        .success-message {
+            color: green;
+            font-style: italic;
+        }
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Delete File from Google Cloud Storage</h1>
+        <div class="form-group">
+            <label for="bucket_name">Bucket Name:</label>
+            <input type="text" id="bucket_name" name="bucket_name" required>
+            <span class="error-message" id="bucket_error"></span>
+        </div>
+        <div class="form-group">
+            <label for="file_name">File Name:</label>
+            <input type="text" id="file_name" name="file_name" required>
+            <span class="error-message" id="file_error"></span>
+        </div>
+        <button onclick="deleteFile()">Delete File</button>
+        <div id="feedback_message"></div>
+    </div>
+
+    <script>
+        function deleteFile() {
+            const bucketName = document.getElementById('bucket_name').value.trim();
+            const fileName = document.getElementById('file_name').value.trim();
+            const bucketError = document.getElementById('bucket_error');
+            const fileError = document.getElementById('file_error');
+            const feedbackMessage = document.getElementById('feedback_message');
+
+            // Clear previous error messages
+            bucketError.textContent = '';
+            fileError.textContent = '';
+            feedbackMessage.textContent = '';
+
+            // Validate inputs
+            if (bucketName === '') {
+                bucketError.textContent = 'Bucket name is required.';
+                return;
+            }
+            if (fileName === '') {
+                fileError.textContent = 'File name is required.';
+                return;
+            }
+
+            fetch('/delete_file', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    bucket_name: bucketName,
+                    file_name: fileName
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to delete file.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                feedbackMessage.textContent = data.message;
+                document.getElementById('bucket_name').value = ''; // Clear input field
+                document.getElementById('file_name').value = ''; // Clear input field
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                feedbackMessage.textContent = 'An error occurred while deleting the file.';
+            });
+        }
+    </script>
+</body>
+</html>

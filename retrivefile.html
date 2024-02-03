@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download File from Google Cloud Storage and Save it in Local</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Download File from Google Cloud Storage</h1>
+        <div>
+            <label for="bucket_name">Bucket Name:</label>
+            <input type="text" id="bucket_name" name="bucket_name">
+            <label for="blob_name">Blob Name:</label>
+            <input type="text" id="blob_name" name="blob_name">
+            <label for="local_file_path">Local File Path:</label>
+            <input type="text" id="local_file_path" name="local_file_path">
+            <button onclick="downloadFile()">Download File</button>
+            <p id="error_message" class="error"></p>
+        </div>
+    </div>
+
+    <script>
+        function downloadFile() {
+            const bucketName = document.getElementById('bucket_name').value;
+            const blobName = document.getElementById('blob_name').value;
+            const localFilePath = document.getElementById('local_file_path').value;
+            const errorMessage = document.getElementById('error_message');
+
+            if (!bucketName || !blobName || !localFilePath) {
+                errorMessage.textContent = 'Please fill in all fields.';
+                return;
+            }
+
+            fetch('/download_file', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    bucket_name: bucketName,
+                    blob_name: blobName,
+                    local_file_path: localFilePath
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to download file.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert(data.message);
+                errorMessage.textContent = '';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                errorMessage.textContent = 'An error occurred while downloading the file.';
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Bucket and Upload File</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+
+        /* Responsive Styling */
+        @media screen and (max-width: 600px) {
+            .container {
+                width: 90%;
+            }
+            input[type="text"],
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>List Buckets in Google Cloud Storage</h1>
+        <div id="bucketList">
+            <p>Loading...</p>
+        </div>
+    </div>
+    <div class="container">
+        <h1>Create Bucket and Upload File to Google Cloud Storage</h1>
+        <div>
+            <label for="bucket_name">Bucket Name:</label>
+            <input type="text" id="bucket_name" name="bucket_name">
+            <label for="local_file_path">Local File Path:</label>
+            <input type="text" id="local_file_path" name="local_file_path">
+            <label for="destination_blob_name">Destination Blob Name:</label>
+            <input type="text" id="destination_blob_name" name="destination_blob_name">
+            <button onclick="uploadFile()">Upload File</button>
+            <p id="error_message" class="error"></p>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript code
+        fetch('/list_buckets')
+            .then(response => response.json())
+            .then(data => {
+                const bucketList = document.getElementById('bucketList');
+                bucketList.innerHTML = ''; // Clear previous content
+                const ul = document.createElement('ul');
+                data.buckets.forEach(bucket => {
+                    const li = document.createElement('li');
+                    li.textContent = bucket;
+                    ul.appendChild(li);
+                });
+                bucketList.appendChild(ul);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const bucketList = document.getElementById('bucketList');
+                bucketList.innerHTML = '<p>An error occurred while fetching the bucket list.</p>';
+            });
+        function uploadFile() {
+            const bucketName = document.getElementById('bucket_name').value;
+            const localFilePath = document.getElementById('local_file_path').value;
+            const destinationBlobName = document.getElementById('destination_blob_name').value;
+            const errorMessage = document.getElementById('error_message');
+
+            if (!bucketName || !localFilePath || !destinationBlobName) {
+                errorMessage.textContent = 'Please fill in all fields.';
+                return;
+            }
+
+            fetch('/upload_file', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    bucket_name: bucketName,
+                    local_file_path: localFilePath,
+                    destination_blob_name: destinationBlobName
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to upload file.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert(data.message);
+                errorMessage.textContent = '';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                errorMessage.textContent = 'An error occurred while uploading the file.';
+            });
+        }
+    </script>
+</body>
+</html>
