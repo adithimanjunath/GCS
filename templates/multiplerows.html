@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch Data from Google Cloud Storage</title>
+</head>
+<body>
+    <h1>Fetch Data from Google Cloud Storage</h1>
+    <form id="fetchForm">
+        <label for="bucketName">Bucket Name:</label>
+        <input type="text" id="bucketName" name="bucketName" required><br>
+        <label for="fileName">File Name:</label>
+        <input type="text" id="fileName" name="fileName" required><br>
+        <button type="submit">Fetch Data</button>
+    </form>
+    <div id="data"></div>
+
+    <script>
+        const fetchForm = document.getElementById('fetchForm');
+        const dataDiv = document.getElementById('data');
+
+        fetchForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(fetchForm);
+            const bucketName = formData.get('bucketName');
+            const fileName = formData.get('fileName');
+
+            try {
+                const response = await fetch(`/fetchData?bucketName=${bucketName}&fileName=${fileName}`);
+                const data = await response.text();
+                dataDiv.innerHTML = data;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                dataDiv.innerHTML = '<p>Error fetching data. Please try again later.</p>';
+            }
+        });
+    </script>
+</body>
+</html>

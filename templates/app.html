@@ -1,0 +1,74 @@
+<!-- app.html (HTML template) -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Cloud Storage Management</title>
+    <link rel="stylesheet" type="text/css" href="app.css">
+    <script type="text/javascript" src="app.js"></script>
+    
+</head>
+<body>
+    <div class="container">
+        <h1>Google Cloud Storage Management</h1>
+        
+        <!-- Create Bucket Form -->
+        <h2>Create Bucket</h2>
+        <form id="createBucketForm">
+            <label for="bucketName">Bucket Name:</label>
+            <input type="text" id="bucketName" name="bucket_name" required>
+            <button type="submit">Create Bucket</button>
+        </form>
+        
+        <!-- Upload File Form -->
+        <h2>Upload File</h2>
+        <form id="uploadFileForm" enctype="multipart/form-data">
+            <label for="bucketNameUpload">Bucket Name:</label>
+            <input type="text" id="bucketNameUpload" name="bucket_name" required>
+            <input type="file" id="fileInput" name="file" required>
+            <button type="submit">Upload File</button>
+        </form>
+        
+        <!-- Delete File Form -->
+        <h2>Delete File</h2>
+        <form id="deleteFileForm">
+            <label for="bucketNameDelete">Bucket Name:</label>
+            <input type="text" id="bucketNameDelete" name="bucket_name" required>
+            <label for="fileName">File Name:</label>
+            <input type="text" id="fileName" name="file_name" required>
+            <button type="submit">Delete File</button>
+        </form>
+        
+        <!-- Download File Form -->
+        <h2>Download File</h2>
+        <form id="downloadFileForm">
+            <label for="bucketNameDownload">Bucket Name:</label>
+            <input type="text" id="bucketNameDownload" name="bucket_name" required>
+            <label for="blobName">Blob Name:</label>
+            <input type="text" id="blobName" name="blob_name" required>
+            <label for="localFilePath">Local File Path:</label>
+            <input type="text" id="localFilePath" name="local_file_path" required>
+            <button type="submit">Download File</button>
+        </form>
+        
+        <!-- Read Data Form -->
+        <h2>Read Data from CSV File</h2>
+        <form id="readDataForm">
+            <label for="bucketNameRead">Bucket Name:</label>
+            <input type="text" id="bucketNameRead" name="bucket_name" required>
+            <label for="blobNameRead">Blob Name:</label>
+            <input type="text" id="blobNameRead" name="blob_name" required>
+            <button type="submit">Read Data</button>
+        </form>
+        
+        <!-- Display Data -->
+        <div id="dataContainer"></div>
+        
+        <div id="responseMessage"></div>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
