@@ -1,0 +1,13 @@
+team_id team_name
+      1India
+      2England
+      3Australia
+      4South Africa
+      5Pakistan
+      6Bangladesh
+      7Afghanistan
+      8Sri Lanka
+        New
+      9Zealand
+     10Netherlands
+
