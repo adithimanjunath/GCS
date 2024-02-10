@@ -3,13 +3,13 @@
 ## Introduction
 
 Welcome to the Cloud Storage Management System project repository! 
+
 This project was developed as part of the Advanced Computer Science subject and focuses on enabling users to interact seamlessly with Google Cloud Storage. 
-The system allows users to perform various operations such as uploading files from local storage to cloud buckets, deleting files in cloud storage,retrieving files to local environments, 
-and reading file contents from the application interface.
+The system allows users to perform various operations such as uploading files from local storage to cloud buckets, deleting files in cloud storage,retrieving files to local environments,and reading file contents from the application interface.
 
 ## Technologies Used
 
-This project was developed using the following technologies:
+This project was developed using the following technologies in VS Code:
 
 - **Python**: Used for backend development.
 - **Flask**: A Python web framework used for building the web application.
