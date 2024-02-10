@@ -39,8 +39,9 @@ To get started with this project:
 
 1. Clone the repository to your local machine.
 2. Set up your Google Cloud Storage account and obtain necessary credentials.
-3. Install Python and required dependencies.
-4. Run the Flask application to start the cloud storage management system.
+3. Install Python, google cloud and storage dependencies.
+4. Connect to GCP from local *gcloud auth application-default login*
+5. Run the Flask application to start the cloud storage management system.
 
 ## Directory Structure
 
